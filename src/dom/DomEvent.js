@@ -198,8 +198,14 @@ export function disableScrollPropagation(el) {
 // `'mousedown'` and `'touchstart'` events (plus browser variants).
 export function disableClickPropagation(el) {
 	on(el, 'mousedown touchstart dblclick contextmenu', stopPropagation);
-	el['_leaflet_disable_click'] = true;
+	disableEvent(el, 'click');
 	return this;
+}
+
+// @function disableEvent(el: HTMLElement, name: string): this
+// Disables leaflet from handling the named event, on this element or its children
+export function disableEvent(el, name) {
+	el[`_leaflet_disable_${  name}`] = true;
 }
 
 // @function preventDefault(ev: DOMEvent): this

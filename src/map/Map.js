@@ -1387,16 +1387,17 @@ export const Map = Evented.extend({
 		return targets;
 	},
 
-	_isClickDisabled(el) {
+	_isEventDisabled(el, name) {
+		const evName = `_leaflet_disable_${  name}`;
 		while (el && el !== this._container) {
-			if (el['_leaflet_disable_click'] || !el.parentNode) { return true; }
+			if (el[evName] || !el.parentNode) { return true; }
 			el = el.parentNode;
 		}
 	},
 
 	_handleDOMEvent(e) {
 		const el = (e.target || e.srcElement);
-		if (!this._loaded || el['_leaflet_disable_events'] || e.type === 'click' && this._isClickDisabled(el)) {
+		if (!this._loaded || el['_leaflet_disable_events'] || this._isEventDisabled(el, e.type)) {
 			return;
 		}
 
