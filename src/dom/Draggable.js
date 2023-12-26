@@ -71,10 +71,19 @@ export const Draggable = Evented.extend({
 		this._moved = false;
 	},
 
+	_isDragTarget(e) {
+		while (e) {
+			if (e['_leaflet_nodrag']) { return false; }
+			e = e.parentNode;
+		}
+		return true;
+	},
+
 	_onDown(e) {
 		// Ignore the event if disabled; this happens in IE11
 		// under some circumstances, see #3666.
 		if (!this._enabled) { return; }
+		if (!this._isDragTarget(e.target)) { return; }
 
 		this._moved = false;
 
@@ -105,7 +114,7 @@ export const Draggable = Evented.extend({
 		this.fire('down');
 
 		const first = e.touches ? e.touches[0] : e,
-		    sizedParent = DomUtil.getSizedParentNode(this._element);
+		sizedParent = DomUtil.getSizedParentNode(this._element);
 
 		this._startPoint = new Point(first.clientX, first.clientY);
 		this._startPos = DomUtil.getPosition(this._element);
@@ -129,7 +138,7 @@ export const Draggable = Evented.extend({
 		}
 
 		const first = (e.touches && e.touches.length === 1 ? e.touches[0] : e),
-		    offset = new Point(first.clientX, first.clientY)._subtract(this._startPoint);
+		offset = new Point(first.clientX, first.clientY)._subtract(this._startPoint);
 
 		if (!offset.x && !offset.y) { return; }
 		if (Math.abs(offset.x) + Math.abs(offset.y) < this.options.clickTolerance) { return; }

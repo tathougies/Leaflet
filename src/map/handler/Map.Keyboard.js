@@ -75,13 +75,14 @@ export const Keyboard = Handler.extend({
 	},
 
 	//  acquire/lose focus #594, #1228, #1540
-	_onPointerDown() {
+	_onPointerDown(e) {
+		if (this._map._isEventDisabled(e.target, 'pointerdown')) { return; }
 		if (this._focused) { return; }
 
 		const body = document.body,
-		    docEl = document.documentElement,
-		    top = body.scrollTop || docEl.scrollTop,
-		    left = body.scrollLeft || docEl.scrollLeft;
+		docEl = document.documentElement,
+		top = body.scrollTop || docEl.scrollTop,
+		left = body.scrollLeft || docEl.scrollLeft;
 
 		this._map._container.focus();
 
@@ -100,7 +101,7 @@ export const Keyboard = Handler.extend({
 
 	_setPanDelta(panDelta) {
 		const keys = this._panKeys = {},
-		    codes = this.keyCodes;
+		codes = this.keyCodes;
 		let i, len;
 
 		for (i = 0, len = codes.left.length; i < len; i++) {
@@ -119,7 +120,7 @@ export const Keyboard = Handler.extend({
 
 	_setZoomDelta(zoomDelta) {
 		const keys = this._zoomKeys = {},
-		      codes = this.keyCodes;
+		codes = this.keyCodes;
 		let i, len;
 
 		for (i = 0, len = codes.zoomIn.length; i < len; i++) {
@@ -142,7 +143,7 @@ export const Keyboard = Handler.extend({
 		if (e.altKey || e.ctrlKey || e.metaKey) { return; }
 
 		const key = e.code,
-		     map = this._map;
+		map = this._map;
 		let offset;
 
 		if (key in this._panKeys) {

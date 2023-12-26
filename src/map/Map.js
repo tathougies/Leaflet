@@ -1389,17 +1389,19 @@ export const Map = Evented.extend({
 
 	_isEventDisabled(el, name) {
 		const evName = `_leaflet_disable_${  name}`;
-		while (el && el !== this._container) {
-			if (el[evName] || !el.parentNode) { return true; }
+	  while (el && el !== this._container) {
+	    if (el[evName]) { return true; }
 			el = el.parentNode;
 		}
+		return false;
 	},
 
 	_handleDOMEvent(e) {
-		const el = (e.target || e.srcElement);
-		if (!this._loaded || el['_leaflet_disable_events'] || this._isEventDisabled(el, e.type)) {
+	  const el = (e.target || e.srcElement);
+	  if (!this._loaded || el['_leaflet_disable_events'] || this._isEventDisabled(el, e.type)) {
+			//            e.stopPropagation();
 			return;
-		}
+	  }
 
 		const type = e.type;
 

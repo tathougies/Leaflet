@@ -193,6 +193,12 @@ export function disableScrollPropagation(el) {
 	return this;
 }
 
+// @function disableDrag(el: HTMLElement): this
+// Disables dragging on this element
+export function disableDrag(el) {
+	el['_leaflet_nodrag'] = true;
+}
+
 // @function disableClickPropagation(el: HTMLElement): this
 // Adds `stopPropagation` to the element's `'click'`, `'dblclick'`, `'contextmenu'`,
 // `'mousedown'` and `'touchstart'` events (plus browser variants).
